@@ -1,0 +1,38 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+	@apply h-full;
+}
+
+body {
+	@apply text-black;
+}
+
+.user {
+	visibility: hidden;
+}
+
+.category {
+	display: inline-block;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: rgb(0, 107, 58);
+	font-family: "Roboto Condensed", sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+	text-decoration: none;
+}
+
+.article-title {
+	font-size: calc(26px);
+	line-height: calc(40px);
+	font-family: "Libre Baskerville", serif;
+	text-align: left;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-weight: 700;
+}
