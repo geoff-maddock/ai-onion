@@ -1,16 +1,17 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte'
 	import { onMount } from 'svelte'
 	import Article from '$lib/components/Article.svelte'
 	import Logo from '$lib/components/Logo.svelte'
 	import type { ChatCompletionRequestMessage } from 'openai'
 	import { SSE } from 'sse.js'
 	import articles from '$lib/stores/stores.js'
+	import articleImage from '$lib/stores/images.js'
 
 	let article: string = ''
 
 	let query: string = ''
 	let answer: string = ''
+	let imageUrl: string = ''
 	let loading: boolean = false
 	let chatMessages: ChatCompletionRequestMessage[] = []
 	let scrollToDiv: HTMLDivElement
@@ -18,19 +19,13 @@
 	onMount(async () => {
 		console.log('onMount called')
 
-		// check localStorage for existing article object
-		// const existingArticle = localStorage.getItem('articles')
-
-		// if (existingArticle !== null) {
-		// 	const articleParsed = JSON.parse(existingArticle)
-		// 	console.log('existing article found')
-		// 	console.log(existingArticle)
-		// 	console.log(articleParsed)
-		// }
-
 		loading = true
+		// mostly works well
 		query =
-			'Write a 1000 word humourous article in the style of The Onion. Always place a single | character between the article title and the article body.'
+			'Write the title for a humorous article in the style of The Onion in double quotes.  Then one single # character.  Then a 500 word humorous article based on the title.'
+		// does not add the # character
+		// query =
+		// 	'Write a 500 word humorous article in the style of The Onion.  Desired format:  "Title of article" # Body of article.'
 		chatMessages = [...chatMessages, { role: 'user', content: query }]
 
 		// server sent events
@@ -57,8 +52,15 @@
 					//chatMessages = [...chatMessages, { role: 'assistant', content: answer }]
 
 					// set the article to the answer
-					articles.set(answer)
+					articles.set([answer])
+					const title = getTitle(answer)
 					answer = ''
+
+					// get the image based on the title
+					const imageUrl = getImage(title)
+					//articleImage.set(imageUrl)
+					console.log('image url return')
+					console.log(imageUrl)
 					return
 				}
 
@@ -76,9 +78,26 @@
 		scrollToBottom()
 	})
 
-	// const getArticle = async() => {
-	//     // get an article
-	// )
+	// create an async function to get an image from the API with a string parameter
+	async function getImage(prompt: string) {
+		console.log('starting getImage function')
+		const body = { prompt: prompt, n: 1, size: '1024x1024' }
+		console.log(body)
+
+		// use fetch to get the image
+		const response = await fetch('/api/images', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(body)
+		})
+
+		const data = await response.json()
+		console.log(data)
+		articleImage.set(data.url)
+		return data.url
+	}
 
 	function scrollToBottom() {
 		setTimeout(function () {
@@ -103,13 +122,12 @@
 		}
 
 		// split the title from the body
-		var arr = content.split('|')
+		var arr = content.split('#')
 		var title = arr[0]
 
-		// remove quotes from title if they exist
-		if (title.startsWith('"') && title.endsWith('"')) {
-			title = title.substring(1, title.length - 1)
-		}
+		// strip all quotes from the title
+		title = title.replace(/"/g, '')
+
 		return title
 	}
 	function getBody(content: string): string {
@@ -119,7 +137,7 @@
 		}
 
 		// split the title from the body
-		var arr = content.split('|')
+		var arr = content.split('#')
 
 		return arr[1]
 	}
@@ -133,12 +151,14 @@
 	<div class="w-full bg-white-900 rounded-md p-4 overflow-y-auto flex flex-col gap-4">
 		<div class="flex flex-row gap-2">
 			{#if $articles}
-				<Article
-					title={getTitle($articles)}
-					category="Top Story"
-					type="assistant"
-					message={getBody($articles)}
-				/>
+				{#each $articles as article}
+					<Article
+						title={getTitle(article)}
+						category="Top Story"
+						type="assistant"
+						message={getBody(article)}
+					/>
+				{/each}
 			{:else}
 				<Article category="Breaking News" title="..." type="assistant" message="" />
 			{/if}
