@@ -25,6 +25,7 @@
 	a.home {
 		background: rgb(0, 107, 58);
 	}
+
 	a {
 		display: flex;
 		height: 100%;
