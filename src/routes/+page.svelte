@@ -171,6 +171,7 @@
 			<article class="grid-article-section">
 				<div class="grid-article-image">
 					<img
+						alt="Default placeholder"
 						src="https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,g_center,h_191,q_60,w_340/50deabc8293cf2bd78f5a05d0113c5a8.jpg"
 					/>
 				</div>
