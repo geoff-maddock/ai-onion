@@ -11,10 +11,10 @@
 
 <style>
 	.article-image-container {
-		width: 645px;
+		width: 362px;
 		height: 362px;
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 	}
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import Article from '$lib/components/Article.svelte'
-	import Logo from '$lib/components/Logo.svelte'
+	import Header from '$lib/components/Header.svelte'
 	import type { ChatCompletionRequestMessage } from 'openai'
 	import { SSE } from 'sse.js'
 	import articles from '$lib/stores/stores.js'
@@ -22,7 +22,7 @@
 		loading = true
 		// mostly works well
 		query =
-			'Write the title for a humorous article in the style of The Onion in double quotes.  Then one single # character.  Then a 500 word humorous article based on the title.'
+			'Write the title for a humorous article in the style of The Onion in double quotes.  Then one single # character.  Then a 300 word humorous article based on the title.'
 		// does not add the # character
 		// query =
 		// 	'Write a 500 word humorous article in the style of The Onion.  Desired format:  "Title of article" # Body of article.'
@@ -144,12 +144,9 @@
 </script>
 
 <div class="flex flex-col pt-4 w-full px-8 items-center gap-2">
-	<div>
-		<h1 class="text-2xl font-bold w-full text-center"><Logo /></h1>
-		<p class="text-sm italic">From THE CUTUPS METHOD</p>
-	</div>
-	<div class="w-full bg-white-900 rounded-md p-4 overflow-y-auto flex flex-col gap-4">
-		<div class="flex flex-row gap-2">
+	<Header />
+	<section id="container" class="w-full">
+		<div class="grid-container">
 			{#if $articles}
 				{#each $articles as article}
 					<Article
@@ -170,7 +167,172 @@
 					message={getBody(message.content)}
 				/>
 			{/each}
+			<!-- Example article sub-sections -->
+			<article class="grid-article-section">
+				<div class="grid-article-image">
+					<img
+						src="https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,g_center,h_191,q_60,w_340/50deabc8293cf2bd78f5a05d0113c5a8.jpg"
+					/>
+				</div>
+				<div class="grid-article-title">
+					<div class="category mb-1">BREAKING NEWS</div>
+					<h4>Midwest Battered By Beautiful Weather</h4>
+				</div>
+			</article>
+			<!-- Vertical seperator -->
+			<div class="grid-vertical-seperator" />
+			<!-- Example article second column -->
+			<div id="grid-second-column">
+				<div class="grid-article-title article-seperator">
+					<div class="category mb-1">LOCAL</div>
+					<h4 class="secondary-title">
+						San Francisco Realtor Shows Couple Earning Under 6-Figure Salary Around Neighborhood’s
+						Best Tent City
+					</h4>
+					<p class="secondary-body">
+						SAN FRANCISCO—Saying this was by far the best option given their financial situation,
+						San Francisco real estate agent Harry Evans reportedly showed a couple earning a
+						sub-six-figure salary Wednesday around the neighborhood’s best tent city. “So we…
+					</p>
+				</div>
+				<div class="grid-article-title article-seperator">
+					<div class="category mb-1">LOCAL</div>
+					<h4 class="secondary-title">Uncle’s Dating Advice Sex Crime</h4>
+					<p class="secondary-body">
+						JEFFERSON CITY, MO—Pulling aside his nephew and providing him with completely
+						unsolicited guidance, local uncle Mitch Fulton, 55, reportedly offered dating advice
+						Tuesday that qualified as a sex crime. “He asked me if I wanted a sip of his beer and…
+					</p>
+				</div>
+				<div class="grid-article-title article-seperator">
+					<div class="category mb-1">LOCAL</div>
+					<h4 class="secondary-title">
+						Airline Forced To Remove Sober Buzzkill From Flight To Las Vegas
+					</h4>
+					<p class="secondary-body">
+						ATLANTA—After law enforcement escorted a passenger off the plane and charged him with
+						orderly conduct, United Airlines confirmed Wednesday that it had been forced to remove
+						sober buzzkill Ted Barnwell from a flight to Las Vegas. “During our…
+					</p>
+				</div>
+			</div>
+			<div class="grid-vertical-seperator" />
+			<div id="grid-third-column">
+				<div class="grid-article-title article-seperator">
+					<img
+						alt="people onion"
+						class="grid-article-image-top"
+						src="https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,g_center,h_416,q_60,w_740/a1glirmtpgnnrgkq96yv.jpg"
+					/>
+					<div class="category mb-1">AMERICAN VOICES</div>
+					<h4 class="secondary-title">
+						Man Charged After Taking Kidnapped Platypus On Train, Shopping Tripgas
+					</h4>
+				</div>
+				<div class="grid-article-title article-seperator">
+					<img
+						alt="people onion"
+						class="grid-article-image-top"
+						src="https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,g_center,h_416,q_60,w_740/027824824ca2c2927043294d5a7f27c4.jpg"
+					/>
+					<div class="category mb-1">BREAKING NEWS</div>
+					<h4 class="secondary-title">Men Explain How They Think An Abortion Works</h4>
+				</div>
+				<div class="grid-article-title article-seperator">
+					<img
+						alt="people onion"
+						class="grid-article-image-top"
+						src="https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,g_center,h_362,q_60,w_645/939ee66e0351c38d3e1c4d5d341d6051.jpg"
+					/>
+					<div class="category mb-1">BREAKING NEWS</div>
+					<h4 class="secondary-title">
+						Dalai Lama Admits He Felt Left Out Being Only Leader Of Major Religion Not To Molest
+						Someone
+					</h4>
+				</div>
+			</div>
 		</div>
 		<div class="" bind:this={scrollToDiv} />
-	</div>
+	</section>
 </div>
+
+<style>
+	#container {
+		display: block;
+	}
+
+	.grid-vertical-seperator {
+		grid-row: span 3 / auto;
+		width: 1px;
+		height: 100%;
+		margin: 0px;
+		background: rgb(229, 229, 229);
+	}
+
+	.grid-article-section {
+		display: flex;
+		flex-wrap: nowrap;
+		grid-column: 1 / 2;
+		order: 2;
+		box-sizing: content-box;
+	}
+	.grid-article-image {
+		width: calc(301px - 0rem);
+		margin-left: 16px;
+	}
+	.grid-article-title {
+		order: -1;
+		flex: 1 1 0%;
+	}
+	.grid-article-title-link {
+		font-size: calc(19px);
+		line-height: calc(32px);
+		margin-bottom: 0.25rem;
+	}
+	.grid-container {
+		grid-template-columns: calc(634px) 0px calc(301px) 0px calc(301px);
+		column-gap: 16px;
+		display: grid;
+		grid-auto-flow: dense;
+	}
+
+	#grid-second-column {
+		grid-column: 3 / 4;
+		grid-row: span 3 / auto;
+	}
+
+	.secondary-title {
+		font-size: calc(15px);
+		line-height: calc(24px);
+		margin-bottom: 0.25rem;
+		color: rgb(34, 34, 34);
+		font-family: 'Libre Baskerville', serif;
+		text-align: left;
+		margin-top: 0px;
+		font-weight: 700;
+	}
+
+	.secondary-body {
+		margin-bottom: 0.25rem;
+		font-size: calc(16px);
+		line-height: calc(24px);
+		color: rgb(34, 34, 34);
+		font-family: Georgia, serif;
+		text-align: left;
+	}
+
+	#grid-third-column {
+		grid-column: 5 / 6;
+		grid-row: span 3 / auto;
+	}
+
+	.grid-article-top-image {
+		margin-bottom: 0.75 rem;
+	}
+
+	.article-seperator {
+		padding-bottom: 1.5rem;
+		border-bottom: 1px solid rgb(229, 229, 229);
+		margin-bottom: calc(1.5rem - 1px);
+	}
+</style>
