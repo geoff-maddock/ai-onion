@@ -56,10 +56,4 @@
 	.logo-center {
 		flex-grow: 1;
 	}
-
-	a {
-		color: #008cba;
-		line-height: inherit;
-		text-decoration: none;
-	}
 </style>
