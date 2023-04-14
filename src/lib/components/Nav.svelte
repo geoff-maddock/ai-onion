@@ -2,15 +2,15 @@
 </script>
 
 <nav class="nav-container w-full">
-	<a href="#" class="home"><span>HOME</span></a>
-	<a href="#"><span>LATEST</span></a>
-	<a href="#"><span>NEWS</span></a>
-	<a href="#"><span>OPINION</span></a>
-	<a href="#"><span>LOCAL</span></a>
-	<a href="#"><span>POLITICS</span></a>
-	<a href="#"><span>ENTERTAINMENT</span></a>
-	<a href="#"><span>SPORTS</span></a>
-	<a href="#"><span>VIDEO</span></a>
+	<a href="/" class="home"><span>HOME</span></a>
+	<a href="/"><span>LATEST</span></a>
+	<a href="/"><span>NEWS</span></a>
+	<a href="/"><span>OPINION</span></a>
+	<a href="/"><span>LOCAL</span></a>
+	<a href="/"><span>POLITICS</span></a>
+	<a href="/"><span>ENTERTAINMENT</span></a>
+	<a href="/"><span>SPORTS</span></a>
+	<a href="/"><span>VIDEO</span></a>
 </nav>
 
 <style>

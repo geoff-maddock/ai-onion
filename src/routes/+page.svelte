@@ -285,11 +285,7 @@
 		order: -1;
 		flex: 1 1 0%;
 	}
-	.grid-article-title-link {
-		font-size: calc(19px);
-		line-height: calc(32px);
-		margin-bottom: 0.25rem;
-	}
+
 	.grid-container {
 		grid-template-columns: calc(634px) 0px calc(301px) 0px calc(301px);
 		column-gap: 16px;
@@ -325,10 +321,6 @@
 	#grid-third-column {
 		grid-column: 5 / 6;
 		grid-row: span 3 / auto;
-	}
-
-	.grid-article-top-image {
-		margin-bottom: 0.75 rem;
 	}
 
 	.article-seperator {

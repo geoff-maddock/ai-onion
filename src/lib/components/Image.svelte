@@ -1,6 +1,5 @@
 <script lang="ts">
 	import articleImage from '$lib/stores/images.js'
-	export let url: string
 	export let title: string
 </script>
 
