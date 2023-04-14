@@ -9,7 +9,7 @@ export const config: Config = {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-	console.log('starting server post')
+
 	try {
 		if (!OPENAI_KEY) {
 			throw new Error('OPENAI_KEY env variable not set')
