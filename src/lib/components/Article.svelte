@@ -8,7 +8,7 @@
 </script>
 
 <article class="article {type === 'user' ? 'hidden' : 'visible'} primary-article">
-	<Image url="https://dummyimage.com/645x362/ccc/fff.png" title="placeholder" />
+	<Image title="placeholder" />
 	<div class="category">{category}</div>
 	<h4 class="article-title">{title}</h4>
 	<div class="article-body">
