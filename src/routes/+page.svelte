@@ -39,7 +39,7 @@
 		eventSource.addEventListener('error', handleError)
 
 		eventSource.addEventListener('message', (e) => {
-			scrollToBottom()
+			// scrollToBottom()
 
 			try {
 				loading = false
@@ -94,7 +94,7 @@
 		})
 
 		const data = await response.json()
-		console.log(data)
+
 		articleImage.set(data.url)
 		return data.url
 	}
