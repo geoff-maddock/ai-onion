@@ -1,11 +1,16 @@
 <script lang="ts">
 	import articleImage from '$lib/stores/images.js'
 	export let title: string
+
+	function handleImgError() {
+		console.log('error')
+		$articleImage = 'images/empty-article-image.svg'
+	}
 </script>
 
 <picture class="article-image-container">
 	<source media="(min-width:800px)" srcset={$articleImage} class="article-image" />
-	<img src={$articleImage} class="article-image" alt={title} />
+	<img src={$articleImage} class="article-image" alt={title} on:error={handleImgError} />
 </picture>
 
 <style>
