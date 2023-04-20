@@ -17,7 +17,6 @@ body {
 }
 
 .category {
-	display: inline-block;
 	text-transform: uppercase;
 	font-weight: 700;
 	color: rgb(0, 107, 58);

@@ -19,13 +19,72 @@
 	onMount(async () => {
 		console.log('onMount called')
 
+		// loading = true
+		// // mostly works well
+		// query =
+		// 	'Write the title for a humorous article in the style of The Onion in double quotes.  Then one single # character.  Then a 300 word humorous article based on the title.'
+		// // does not add the # character
+		// // query =
+		// // 	'Write a 500 word humorous article in the style of The Onion.  Desired format:  "Title of article" # Body of article.'
+		// chatMessages = [...chatMessages, { role: 'user', content: query }]
+
+		// // server sent events
+		// const eventSource = new SSE('/api/chat', {
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	payload: JSON.stringify({ messages: chatMessages })
+		// })
+
+		// eventSource.addEventListener('error', handleError)
+
+		// eventSource.addEventListener('message', (e) => {
+		// 	// scrollToBottom()
+
+		// 	try {
+		// 		loading = false
+		// 		if (e.data === '[DONE]') {
+		// 			// log the full response from openAI
+		// 			console.log('response from openAI')
+		// 			console.log(answer)
+
+		// 			// updates the chat messages with the answer
+		// 			//chatMessages = [...chatMessages, { role: 'assistant', content: answer }]
+
+		// 			// set the article to the answer
+		// 			articles.set([answer])
+		// 			const title = getTitle(answer)
+		// 			answer = ''
+
+		// 			// get the image based on the title
+		// 			const imageUrl = getImage(title)
+		// 			//articleImage.set(imageUrl)
+		// 			console.log('image url return')
+		// 			console.log(imageUrl)
+		// 			return
+		// 		}
+
+		// 		const completionResponse = JSON.parse(e.data)
+		// 		const [{ delta }] = completionResponse.choices
+
+		// 		if (delta.content) {
+		// 			answer = (answer ?? '') + delta.content
+		// 		}
+		// 	} catch (err) {
+		// 		handleError(err)
+		// 	}
+		// })
+		// eventSource.stream()
+		// scrollToBottom()
+	})
+
+	async function refreshArticle() {
+		console.log('refreshArticle called')
 		loading = true
 		// mostly works well
 		query =
 			'Write the title for a humorous article in the style of The Onion in double quotes.  Then one single # character.  Then a 300 word humorous article based on the title.'
-		// does not add the # character
-		// query =
-		// 	'Write a 500 word humorous article in the style of The Onion.  Desired format:  "Title of article" # Body of article.'
+
 		chatMessages = [...chatMessages, { role: 'user', content: query }]
 
 		// server sent events
@@ -39,17 +98,11 @@
 		eventSource.addEventListener('error', handleError)
 
 		eventSource.addEventListener('message', (e) => {
-			// scrollToBottom()
-
 			try {
-				loading = false
 				if (e.data === '[DONE]') {
 					// log the full response from openAI
 					console.log('response from openAI')
 					console.log(answer)
-
-					// updates the chat messages with the answer
-					//chatMessages = [...chatMessages, { role: 'assistant', content: answer }]
 
 					// set the article to the answer
 					articles.set([answer])
@@ -58,8 +111,6 @@
 
 					// get the image based on the title
 					const imageUrl = getImage(title)
-					//articleImage.set(imageUrl)
-					console.log('image url return')
 					console.log(imageUrl)
 					return
 				}
@@ -75,8 +126,7 @@
 			}
 		})
 		eventSource.stream()
-		scrollToBottom()
-	})
+	}
 
 	// create an async function to get an image from the API with a string parameter
 	async function getImage(prompt: string) {
@@ -96,17 +146,8 @@
 		const data = await response.json()
 
 		articleImage.set(data.url)
+		loading = false
 		return data.url
-	}
-
-	function scrollToBottom() {
-		setTimeout(function () {
-			scrollToDiv.scrollIntoView({
-				behavior: 'smooth',
-				block: 'end',
-				inline: 'nearest'
-			})
-		}, 100)
 	}
 
 	function handleError<T>(err: T) {
@@ -154,10 +195,19 @@
 						category="Top Story"
 						type="assistant"
 						message={getBody(article)}
+						refresh={refreshArticle}
+						{loading}
 					/>
 				{/each}
 			{:else}
-				<Article category="Breaking News" title="..." type="assistant" message="" />
+				<Article
+					category="Breaking News"
+					title="..."
+					type="assistant"
+					message=""
+					refresh={refreshArticle}
+					{loading}
+				/>
 			{/if}
 			{#each chatMessages as message}
 				<Article
@@ -165,8 +215,11 @@
 					title={getTitle(message.content)}
 					type={message.role}
 					message={getBody(message.content)}
+					refresh={refreshArticle}
+					{loading}
 				/>
 			{/each}
+
 			<!-- Example article sub-sections -->
 			<article class="grid-article-section">
 				<div class="grid-article-image">
@@ -180,6 +233,7 @@
 					<h4>Midwest Battered By Beautiful Weather</h4>
 				</div>
 			</article>
+
 			<!-- Vertical seperator -->
 			<div class="grid-vertical-seperator" />
 			<!-- Example article second column -->
@@ -262,12 +316,47 @@
 		display: block;
 	}
 
+	.loading-button {
+		position: relative;
+		right: 60px;
+	}
+
+	.animate-character {
+		text-transform: uppercase;
+		background-image: linear-gradient(-225deg, #231557 0%, #44107a 29%, #55ad0c 67%, #fff800 100%);
+		background-size: auto auto;
+		background-clip: border-box;
+		background-size: 200% auto;
+		color: #fff;
+		background-clip: text;
+		text-fill-color: transparent;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		animation: textclip 2s linear infinite;
+		display: inline-block;
+		font-family: 'Libre Baskerville', serif;
+	}
+
+	@keyframes textclip {
+		to {
+			background-position: 200% center;
+		}
+	}
+
 	.grid-vertical-seperator {
 		grid-row: span 3 / auto;
 		width: 1px;
 		height: 100%;
 		margin: 0px;
 		background: rgb(229, 229, 229);
+	}
+
+	.grid-article-loading {
+		display: flex;
+		flex-wrap: nowrap;
+		grid-column: 1 / 2;
+		order: 1;
+		box-sizing: content-box;
 	}
 
 	.grid-article-section {
@@ -277,6 +366,7 @@
 		order: 2;
 		box-sizing: content-box;
 	}
+
 	.grid-article-image {
 		width: calc(301px - 0rem);
 		margin-left: 16px;

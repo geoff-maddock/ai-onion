@@ -3,7 +3,12 @@
 
 <div class="logo">
 	<a href="/" class="logo-link">
-		<img src="images/ai-onion-logo.png" width="300px" style="max-width: none;" />
+		<img
+			src="images/ai-onion-logo.png"
+			width="300px"
+			style="max-width: none;"
+			alt="AI Onion logo"
+		/>
 	</a>
 </div>
 
