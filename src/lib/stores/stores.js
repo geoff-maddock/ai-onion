@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 
-export const defaultValue = '["Default Title#Default article"]'
+export const defaultValue = '["Loading Story Title#Loading Story Contents"]'
 const initialValue = browser ? window.localStorage.getItem('articles') ?? defaultValue : defaultValue
 
 const parsedInitialValue = JSON.parse(initialValue);
