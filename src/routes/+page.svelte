@@ -79,7 +79,7 @@
 	})
 
 	async function refreshArticle() {
-		console.log('refreshArticle called')
+		console.log('refresh article called')
 		loading = true
 		// mostly works well
 		query =
