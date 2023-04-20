@@ -5,7 +5,7 @@
 
 <div class="header-container w-full">
 	<div class="logo-container w-full">
-		<div class="logo flex ">
+		<div class="logo flex">
 			<Logo />
 			<div class="tagline flex">America's Finest AI News Source</div>
 		</div>
@@ -46,7 +46,7 @@
 	}
 
 	.logo {
-		width: 400px;
+		width: 600px;
 	}
 
 	.profile {
