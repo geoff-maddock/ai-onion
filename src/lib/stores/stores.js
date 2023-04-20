@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 
-const defaultValue = '["Default Title#Default article"]'
+export const defaultValue = '["Default Title#Default article"]'
 const initialValue = browser ? window.localStorage.getItem('articles') ?? defaultValue : defaultValue
 
 const parsedInitialValue = JSON.parse(initialValue);
@@ -13,9 +13,12 @@ articles.subscribe((value) => {
 
         // merge the parsed initial value with the new value
         const mergedValue = [...parsedInitialValue, ...value];
+
         // stringify the value so it can be stored
         // const stringifiedValue = JSON.stringify(mergedValue);
+
         const stringifiedValue = JSON.stringify(value);
+
         // store articles in local storage
         window.localStorage.setItem('articles', stringifiedValue);
     }

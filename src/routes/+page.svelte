@@ -5,10 +5,10 @@
 	import type { ChatCompletionRequestMessage } from 'openai'
 	import { SSE } from 'sse.js'
 	import articles from '$lib/stores/stores.js'
+	import { defaultValue } from '$lib/stores/stores.js'
 	import articleImage from '$lib/stores/images.js'
 
 	let article: string = ''
-
 	let query: string = ''
 	let answer: string = ''
 	let imageUrl: string = ''
@@ -17,64 +17,64 @@
 	let scrollToDiv: HTMLDivElement
 
 	onMount(async () => {
-		console.log('onMount called')
+		console.log('on app mount')
 
-		// loading = true
-		// // mostly works well
-		// query =
-		// 	'Write the title for a humorous article in the style of The Onion in double quotes.  Then one single # character.  Then a 300 word humorous article based on the title.'
-		// // does not add the # character
-		// // query =
-		// // 	'Write a 500 word humorous article in the style of The Onion.  Desired format:  "Title of article" # Body of article.'
-		// chatMessages = [...chatMessages, { role: 'user', content: query }]
+		if (window.localStorage.getItem('articles') == defaultValue) {
+			console.log('loading initial article')
+			loading = true
+			// mostly works well
+			query =
+				'Write the title for a humorous article in the style of The Onion in double quotes.  Then one single # character.  Then a 300 word humorous article based on the title.'
+			chatMessages = [...chatMessages, { role: 'user', content: query }]
 
-		// // server sent events
-		// const eventSource = new SSE('/api/chat', {
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	payload: JSON.stringify({ messages: chatMessages })
-		// })
+			// server sent events
+			const eventSource = new SSE('/api/chat', {
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				payload: JSON.stringify({ messages: chatMessages })
+			})
 
-		// eventSource.addEventListener('error', handleError)
+			eventSource.addEventListener('error', handleError)
 
-		// eventSource.addEventListener('message', (e) => {
-		// 	// scrollToBottom()
+			eventSource.addEventListener('message', (e) => {
+				// scrollToBottom()
 
-		// 	try {
-		// 		loading = false
-		// 		if (e.data === '[DONE]') {
-		// 			// log the full response from openAI
-		// 			console.log('response from openAI')
-		// 			console.log(answer)
+				try {
+					loading = false
+					if (e.data === '[DONE]') {
+						// log the full response from openAI
+						console.log('response from openAI')
+						console.log(answer)
 
-		// 			// updates the chat messages with the answer
-		// 			//chatMessages = [...chatMessages, { role: 'assistant', content: answer }]
+						// updates the chat messages with the answer
+						//chatMessages = [...chatMessages, { role: 'assistant', content: answer }]
 
-		// 			// set the article to the answer
-		// 			articles.set([answer])
-		// 			const title = getTitle(answer)
-		// 			answer = ''
+						// set the article to the answer
+						articles.set([answer])
+						const title = getTitle(answer)
+						answer = ''
 
-		// 			// get the image based on the title
-		// 			const imageUrl = getImage(title)
-		// 			//articleImage.set(imageUrl)
-		// 			console.log('image url return')
-		// 			console.log(imageUrl)
-		// 			return
-		// 		}
+						// get the image based on the title
+						const imageUrl = getImage(title)
+						//articleImage.set(imageUrl)
+						console.log('image url return')
+						console.log(imageUrl)
+						return
+					}
 
-		// 		const completionResponse = JSON.parse(e.data)
-		// 		const [{ delta }] = completionResponse.choices
+					const completionResponse = JSON.parse(e.data)
+					const [{ delta }] = completionResponse.choices
 
-		// 		if (delta.content) {
-		// 			answer = (answer ?? '') + delta.content
-		// 		}
-		// 	} catch (err) {
-		// 		handleError(err)
-		// 	}
-		// })
-		// eventSource.stream()
+					if (delta.content) {
+						answer = (answer ?? '') + delta.content
+					}
+				} catch (err) {
+					handleError(err)
+				}
+			})
+			eventSource.stream()
+		}
 		// scrollToBottom()
 	})
 
