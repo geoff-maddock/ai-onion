@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 
-const defaultValue = 'https://dummyimage.com/645x362/ccc/fff.png'
+const defaultValue = 'images/spinner2.gif'
 const initialValue = browser ? window.localStorage.getItem('articleImage') ?? defaultValue : defaultValue
 
 const articleImage = writable(initialValue);
